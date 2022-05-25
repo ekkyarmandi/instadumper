@@ -8,7 +8,7 @@ L = Instaloader()
 L.login(USERNAME,PASSWORD)
 
 # load target handle
-target_handle = "ekkyarmandi"
+target_handle = "worldofnolabel"
 profile = Profile.from_username(L.context,target_handle)
 
 # iterate account followers
