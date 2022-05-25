@@ -13,10 +13,10 @@ profile = Profile.from_username(L.context,target_handle)
 
 # iterate account followers
 entries = []
-for user in profile.get_followees():
+for user in profile.get_followers():
 
     # find latest post
-    for post in user.get_post():
+    for post in user.get_posts():
         post_url = post.url
         post_date = post.date_local.strftime("%H:%M:%S %d/%m/%Y")
         break
@@ -33,7 +33,7 @@ for user in profile.get_followees():
         last_post_date=post_date,
         biography=user.biography,
         is_bussiness=user.is_business_account,
-        business_category=user.bisness_category_name,
+        business_category=user.business_category_name,
         links=user.external_url
     )
     entries.append(entry)
@@ -42,6 +42,6 @@ for user in profile.get_followees():
 # dump the collected data
 json.dump(
     entries,
-    open("entries.json","w"),
+    open("entries.json","w",encoding="utf-8"),
     indent=4
 )
