@@ -11,9 +11,14 @@ L.login(USERNAME,PASSWORD)
 target_handle = "jakesthekidd"
 profile = Profile.from_username(L.context,target_handle)
 
+# delay parameter
+x = 5 # followers
+n = 10 # sec
+
 # iterate account followers
 try:
     entries = []
+    count = 0
     for user in profile.get_followers():
 
         # find latest post
@@ -43,7 +48,14 @@ try:
         entries.append(entry)
         print("Total followers being scraped:",len(entries))
         print(entry)
-        time.sleep(1)
+
+        # put some delay; "it will pause for n sec after crawling x item(s)"
+        count += 1
+        if count == x: # if count equals to x item(s)
+            time.sleep(n) # wait for n sec
+            count = 0 # reset the counter
+        else:
+            time.sleep(1)
 
 except Exception as E:
     print(E)
