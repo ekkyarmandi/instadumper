@@ -1,0 +1,6 @@
+__pycache__/
+archive/
+project/
+*.zip
+*.csv
+*.json
