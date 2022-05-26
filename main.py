@@ -1,15 +1,14 @@
 from instaloader import Instaloader, Profile
 from credentials import USERNAME, PASSWORD
-from pprint import pprint
 from pandas import DataFrame
-import json
+import time
 
 # login into Instagram
 L = Instaloader()
 L.login(USERNAME,PASSWORD)
 
 # load target handle
-target_handle = "martinsuryajaya"
+target_handle = "jakesthekidd"
 profile = Profile.from_username(L.context,target_handle)
 
 # iterate account followers
@@ -42,17 +41,12 @@ try:
             links=user.external_url
         )
         entries.append(entry)
-        pprint(entry, sort_dicts=False)
+        print("Total followers being scraped:",len(entries))
+        print(entry)
+        time.sleep(1)
 
 except Exception as E:
     print(E)
-
-# dump the collected data
-json.dump(
-    entries,
-    open(target_handle+".json","w",encoding="utf-8"),
-    indent=4
-)
 
 # write it out into a csv
 data = DataFrame(entries)
