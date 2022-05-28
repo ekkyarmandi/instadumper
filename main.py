@@ -10,6 +10,7 @@ L = Instaloader()
 L.login(USERNAME,PASSWORD)
 
 # load target handle
+max_counter = 50
 target_handle = "jakesthekidds"
 profile = Profile.from_username(L.context,target_handle)
 
@@ -26,6 +27,7 @@ else:
     entries = []
 
 try:
+    counter = 0
     for user in followers_iterator:
 
         # find latest post
@@ -55,6 +57,9 @@ try:
         entries.append(entry)
         print(entry)
         print("Total data:",len(entries),"\n")
+        counter += 1
+        if counter >= max_counter:
+            raise Exception("Program stoped by counter")
 
 except:
     json.dump(
