@@ -1,20 +1,32 @@
-from instaloader import Instaloader, Profile
+from instaloader import Instaloader, Profile, load_structure_from_file, save_structure_to_file
 from credentials import USERNAME, PASSWORD
 from pandas import DataFrame
+import json
 import time
+import os
 
 # login into Instagram
 L = Instaloader()
 L.login(USERNAME,PASSWORD)
 
 # load target handle
-target_handle = "jakesthekidd"
+target_handle = "jakesthekidds"
 profile = Profile.from_username(L.context,target_handle)
 
 # iterate account followers
-try:
+followers_iterator = profile.get_followers()
+if os.path.exists("previous_iteration.json"):
+    prev = load_structure_from_file(
+        L.context,
+        "previous_iteration.json"
+    )
+    followers_iterator.thaw(prev)
+    entries = json.load(open("entries.json",encoding="utf-8"))
+else:
     entries = []
-    for user in profile.get_followers():
+
+try:
+    for user in followers_iterator:
 
         # find latest post
         post_url = None
@@ -41,12 +53,19 @@ try:
             links=user.external_url
         )
         entries.append(entry)
-        print("Total followers being scraped:",len(entries))
         print(entry)
-        time.sleep(1)
+        print("Total data:",len(entries),"\n")
 
-except Exception as E:
-    print(E)
+except:
+    json.dump(
+        entries,
+        open("entries.json","w",encoding="utf-8"),
+        indent=4
+    )
+    save_structure_to_file(
+        followers_iterator.freeze(),
+        "previous_iteration.json"
+    )
 
 # write it out into a csv
 data = DataFrame(entries)
